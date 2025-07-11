@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6", /* tells TypeScript what version of JS to generate when it compiles TS code */
+    "lib": ["dom", "es6"], /* what APIs are available: dom - Browser APIs, es6 - features like Promise, Map, Set, etc */
+    "jsx": "react-jsx", /* how to handle JSX */
+    "module": "es6", /* what module system to use when import and export */
+    "moduleResolution": "node", /* how to fine modules - NodeJS module resolution - looks in node_modules, or relative file ...*/
+    "strict": true, /* strict type checking*/
+    "esModuleInterop": true, /* allows importing CommonJS modules as ES modules */
+    "useUnknownInCatchVariables": false /* error can of type any */
+  },
+  "include": ["src/**/*"]
+}
