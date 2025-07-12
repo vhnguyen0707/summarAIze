@@ -7,7 +7,7 @@ module.exports = {
     entry: {
         // Specify entry points for different parts of the extension. Each is a separate bundle that Webpack will create
         // with all the imports & dep included in each entry point
-        content: './src/content.ts',
+        content: './src/scripts/content.ts',
         popup: './src/popup.tsx'
     },
     output: {
