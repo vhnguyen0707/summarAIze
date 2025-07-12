@@ -1,4 +1,4 @@
-
+import {getYouTubeTitleAndTranscript} from "./transcript-service";
 
 function isYoutubeVideoPage() {
     // Check if the current page is a YouTube video page
@@ -11,7 +11,7 @@ function getVideoIdFromUrl() {
     return urlParams.get("v"); // "v" is the query parameter that holds the video ID in YouTube URLs
 }
 
-function waitForElement(elementId, timeoutMS = 5000) {
+function waitForElement(elementId: string, timeoutMS = 5000) {
     // check if element is already present
     const element = document.getElementById(elementId);
     if (element) return element;
@@ -24,7 +24,7 @@ function waitForElement(elementId, timeoutMS = 5000) {
         // Set a timeout to reject the promise if the element is not found within the specified time
         const timeoutId = setTimeout(() => reject("Element not found within timeout"), timeoutMS);
         // Callback function execute when mutations are observed
-        const callback = (_, observer) => {
+        const callback = (_: MutationRecord[], observer: MutationObserver) => {
             // Stop observing once the element is found
             const element = document.getElementById(elementId);
             if (element) {
@@ -38,7 +38,41 @@ function waitForElement(elementId, timeoutMS = 5000) {
         observer.observe(targetNode, config);
     })
 }
-function handleVideoChange() {
+
+let previousVideoId: string | null = null;
+async function handleVideoChange() {
+    try {
+        if (!isYoutubeVideoPage()) {
+            console.warn("Not a YouTube video page");
+            return;
+        }
+        /**
+         * Only process if the video ID is valid and different from the last processed video ID
+         * YouTube can dynamically load a new video without performing a full page reload due to the SPA nature.
+         * So we manually check if the video ID has changed to ensure that the script processes only new videos.
+         * This prevents re-injecting the sidebar or re-fetching captions for the same video.
+         */
+        const videoId = getVideoIdFromUrl();
+        if (!videoId || videoId === previousVideoId) return;
+        previousVideoId = videoId;
+        const videoDetails = await getYouTubeTitleAndTranscript(videoId);
+        if (videoDetails) {
+            const element = await waitForElement("related");
+            if (element) {
+                console.log("Injecting summary sidebar for video...");
+                // injectSidebar(videoDetails.title, videoDetails.transcript, videoId, element);
+            }
+        }
+    } catch (e) {
+        console.error("Error:", e);
+    }
 
 }
-function observeForVideoChanges() {}
+function observeForVideoChanges() {
+    const targetNode = document.body;
+    const config = { childList: true, subtree: true }; // Observe changes in DOM's child nodes and entire subtree
+    const observer = new MutationObserver(handleVideoChange);
+    observer.observe(targetNode, config);
+}
+
+observeForVideoChanges();
