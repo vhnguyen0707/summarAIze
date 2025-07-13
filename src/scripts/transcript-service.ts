@@ -146,13 +146,43 @@ export async function getYouTubeTitleAndTranscript(videoId: string): Promise<{ti
     try {
         const {title, apiKey, clientVersion} = await getDetailsForInnertube(videoId);
         const playerResponse = await fetchPlayerResponse(videoId, apiKey, clientVersion);
-        // const sortedTracks = sortCaptionsByLanguage(captionTracks, "English");
         const captionTracks = getSortedCaptionTracks(playerResponse, "English");
+        if (captionTracks.length === 0) {
+            throw new Error("No English captions found for this video");
+        }
         const transcript = await getXMLTranscript(captionTracks[0].baseUrl);
         console.log("Transcript fetched successfully:", transcript);
         return {title, transcript: convertTranscriptArrToString(transcript)};
     } catch (error) {
         console.error("Error getting YouTube transcript: ", error);
         return null; // Return null if any error occurs
+    }
+}
+
+export async function getYouTubeTitleAndAvailableLanguages(videoId: string): Promise<{title: string, languages: Array<{language: string, baseUrl: string}>} | null> {
+    try {
+        const {title, apiKey, clientVersion} = await getDetailsForInnertube(videoId);
+        const playerResponse = await fetchPlayerResponse(videoId, apiKey, clientVersion);
+        const captionTracks = getSortedCaptionTracks(playerResponse, "English");
+        
+        const languages = captionTracks.map(track => ({
+            language: track.language,
+            baseUrl: track.baseUrl
+        }));
+        
+        return {title, languages};
+    } catch (error) {
+        console.error("Error getting YouTube languages: ", error);
+        return null;
+    }
+}
+
+export async function getTranscriptForLanguage(baseUrl: string): Promise<string | null> {
+    try {
+        const transcript = await getXMLTranscript(baseUrl);
+        return convertTranscriptArrToString(transcript);
+    } catch (error) {
+        console.error("Error getting transcript for language: ", error);
+        return null;
     }
 }
