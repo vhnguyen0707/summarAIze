@@ -46,6 +46,7 @@ module.exports = {
         new webpack.DefinePlugin({
             'process.env.OPENAI_API_KEY': JSON.stringify(process.env.OPENAI_API_KEY),
             'process.env.HF_TOKEN': JSON.stringify(process.env.HF_TOKEN),
+            'process.env.OPENROUTER_API_KEY': JSON.stringify(process.env.OPENROUTER_API_KEY),
         }),
     ],
 };
