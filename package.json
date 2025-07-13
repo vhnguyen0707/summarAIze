@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --config webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "autoprefixer": "^10.4.20",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.11",
+    "openai": "^5.9.0",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

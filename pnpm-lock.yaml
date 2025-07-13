@@ -23,6 +23,9 @@ dependencies:
   framer-motion:
     specifier: ^11.11.11
     version: 11.18.2(react-dom@18.3.1)(react@18.3.1)
+  openai:
+    specifier: ^5.9.0
+    version: 5.9.0
   postcss:
     specifier: ^8.4.47
     version: 8.5.6
@@ -2147,6 +2150,19 @@ packages:
   /object-hash@3.0.0:
     resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
     engines: {node: '>= 6'}
+    dev: false
+
+  /openai@5.9.0:
+    resolution: {integrity: sha512-cmLC0pfqLLhBGxE4aZPyRPjydgYCncppV2ClQkKmW79hNjCvmzkfhz8rN5/YVDmjVQlFV+UsF1JIuNjNgeagyQ==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.23.8
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
     dev: false
 
   /p-limit@2.3.0:
