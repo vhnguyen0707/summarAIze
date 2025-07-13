@@ -1,4 +1,5 @@
 import {getYouTubeTitleAndTranscript} from "./transcript-service";
+import {injectSidebar} from "../components/injectSidebar";
 
 function isYoutubeVideoPage() {
     // Check if the current page is a YouTube video page
@@ -11,10 +12,10 @@ function getVideoIdFromUrl() {
     return urlParams.get("v"); // "v" is the query parameter that holds the video ID in YouTube URLs
 }
 
-function waitForElement(elementId: string, timeoutMS = 5000) {
+function waitForElement(elementId: string, timeoutMS = 5000): Promise<HTMLElement | null> {
     // check if element is already present
     const element = document.getElementById(elementId);
-    if (element) return element;
+    if (element) return Promise.resolve(element);
 
     return new Promise((resolve, reject) => {
         // Node that will be used to observe the DOM for changes
@@ -43,7 +44,6 @@ let previousVideoId: string | null = null;
 async function handleVideoChange() {
     try {
         if (!isYoutubeVideoPage()) {
-            console.warn("Not a YouTube video page");
             return;
         }
         /**
@@ -57,10 +57,10 @@ async function handleVideoChange() {
         previousVideoId = videoId;
         const videoDetails = await getYouTubeTitleAndTranscript(videoId);
         if (videoDetails) {
-            const element = await waitForElement("related");
+            const element = await waitForElement("secondary");
             if (element) {
                 console.log("Injecting summary sidebar for video...");
-                // injectSidebar(videoDetails.title, videoDetails.transcript, videoId, element);
+                injectSidebar(videoDetails.title, videoDetails.transcript, videoId, element);
             }
         }
     } catch (e) {

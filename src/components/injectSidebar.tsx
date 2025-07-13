@@ -7,7 +7,7 @@ export async function injectSidebar(title: string, transcript: string, videoId: 
     if (!summaryDiv) {
         summaryDiv = document.createElement("div");
         summaryDiv.id  = "yt-ai-summary-sidebar";
-        element.appendChild(summaryDiv);
+        element.insertBefore(summaryDiv, element.firstChild);
     }
 
     if (!summaryRoot) {
