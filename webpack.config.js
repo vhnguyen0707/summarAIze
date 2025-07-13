@@ -8,7 +8,7 @@ module.exports = {
         // Specify entry points for different parts of the extension. Each is a separate bundle that Webpack will create
         // with all the imports & dep included in each entry point
         content: './src/scripts/content.ts',
-        popup: './src/popup.tsx'
+        popup: './src/components/popup.tsx'
     },
     output: {
         // Defines naming format and output directory for the bundled files. We output to the public/ which is loaded by the extension
@@ -45,6 +45,7 @@ module.exports = {
         // during compilation
         new webpack.DefinePlugin({
             'process.env.OPENAI_API_KEY': JSON.stringify(process.env.OPENAI_API_KEY),
+            'process.env.HF_TOKEN': JSON.stringify(process.env.HF_TOKEN),
         }),
     ],
 };
